@@ -1,49 +1,49 @@
 package config
 
 const (
-    // DefaultPathToDatabase defines the path to the sqlite storage file.
-    DefaultPathToDatabase = "./storage"
+	// DefaultPathToDatabase defines the path to the sqlite storage file.
+	DefaultPathToDatabase = "./storage"
 
-    // DefaultPathToSchemaScripts defines the path to the scripts managing the database structure.
-    // nolint: godox
-    DefaultPathToSchemaScripts = "./scripts/sql/sqlite" // TODO: change that it works with other dialects like postgres
+	// DefaultPathToSchemaScripts defines the path to the scripts managing the database structure.
+	// nolint: godox
+	DefaultPathToSchemaScripts = "./scripts/sql/sqlite" // TODO: change that it works with other dialects like postgres
 )
 
 // Database provides the configuration for the database.
 type Database struct {
-    StoragePath       *string `json:"storage_path"`
-    SchemaScriptsPath *string `json:"schema_scripts_path"`
+	StoragePath       *string `json:"storage_path"`
+	SchemaScriptsPath *string `json:"schema_scripts_path"`
 }
 
 // GetStoragePath returns the path to the storage file.
 func (d *Database) GetStoragePath() string {
-    if d == nil || d.StoragePath == nil {
-        return DefaultPathToDatabase
-    }
+	if d == nil || d.StoragePath == nil {
+		return DefaultPathToDatabase
+	}
 
-    return *d.StoragePath
+	return *d.StoragePath
 }
 
 // GetSchemaScriptPath returns the path to the schema script files managing the database structure.
 func (d *Database) GetSchemaScriptPath() string {
-    if d == nil || d.SchemaScriptsPath == nil {
-        return DefaultPathToSchemaScripts
-    }
+	if d == nil || d.SchemaScriptsPath == nil {
+		return DefaultPathToSchemaScripts
+	}
 
-    return *d.SchemaScriptsPath
+	return *d.SchemaScriptsPath
 }
 
 // Merge overwrites the values given by the config from parameter if they differ from default values.
 func (d *Database) Merge(cfg *Database) {
-    if cfg == nil || d == nil {
-        return
-    }
+	if cfg == nil || d == nil {
+		return
+	}
 
-    if cfg.GetSchemaScriptPath() != DefaultPathToSchemaScripts {
-        d.SchemaScriptsPath = cfg.SchemaScriptsPath
-    }
+	if cfg.GetSchemaScriptPath() != DefaultPathToSchemaScripts {
+		d.SchemaScriptsPath = cfg.SchemaScriptsPath
+	}
 
-    if cfg.GetStoragePath() != DefaultPathToDatabase {
-        d.StoragePath = cfg.StoragePath
-    }
+	if cfg.GetStoragePath() != DefaultPathToDatabase {
+		d.StoragePath = cfg.StoragePath
+	}
 }

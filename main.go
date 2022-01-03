@@ -10,7 +10,10 @@ import (
 	"time"
 
 	"github.com/gorilla/mux"
+	"github.com/jmoiron/sqlx"
 	"github.com/rebel-l/smis"
+	"github.com/rebel-l/ttrack_api/bootstrap"
+	"github.com/rebel-l/ttrack_api/config"
 	"github.com/rebel-l/ttrack_api/endpoint/doc"
 	"github.com/rebel-l/ttrack_api/endpoint/ping"
 	"github.com/sirupsen/logrus"
@@ -19,9 +22,11 @@ import (
 const (
 	defaultPort    = 3000
 	defaultTimeout = 15 * time.Second
+	version        = "0.1.0"
 )
 
 var (
+	db   *sqlx.DB
 	log  logrus.FieldLogger
 	port *int
 	svc  *smis.Service
@@ -37,6 +42,13 @@ func initCustom() error {
 	/**
 	  2. add your custom service initialisation below, e.g. database connection, caches etc.
 	*/
+	var err error
+
+	// Database
+	db, err = bootstrap.Database(&config.Database{}, version, true) // nolint: exhaustivestruct
+	if err != nil {
+		return fmt.Errorf("bootstrapping database failed: %w", err)
+	}
 
 	return nil
 }

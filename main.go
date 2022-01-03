@@ -11,6 +11,8 @@ import (
 
 	"github.com/gorilla/mux"
 	"github.com/rebel-l/smis"
+	"github.com/rebel-l/ttrack_api/endpoint/doc"
+	"github.com/rebel-l/ttrack_api/endpoint/ping"
 	"github.com/sirupsen/logrus"
 )
 
@@ -19,9 +21,11 @@ const (
 	defaultTimeout = 15 * time.Second
 )
 
-var log logrus.FieldLogger
-var port *int
-var svc *smis.Service
+var (
+	log  logrus.FieldLogger
+	port *int
+	svc  *smis.Service
+)
 
 func initCustomFlags() {
 	/**
@@ -69,7 +73,7 @@ func main() {
 
 func initService() {
 	router := mux.NewRouter()
-	srv := &http.Server{
+	srv := &http.Server{ // nolint: exhaustivestruct
 		Handler:      router,
 		Addr:         fmt.Sprintf(":%d", *port),
 		WriteTimeout: defaultTimeout,

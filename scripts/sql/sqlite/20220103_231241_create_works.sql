@@ -1,0 +1,18 @@
+-- up
+CREATE TABLE IF NOT EXISTS works (
+    id CHAR(36) NOT NULL PRIMARY KEY,
+    start VARCHAR(50) NOT NULL,
+    stop,
+    created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    modified_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TRIGGER IF NOT EXISTS works_after_update AFTER UPDATE ON works BEGIN
+    UPDATE works SET modified_at = DATETIME('now') WHERE id = NEW.id;
+end;
+
+
+-- down
+DROP TRIGGER IF EXISTS works_after_update;
+
+DROP TABLE IF EXISTS works;

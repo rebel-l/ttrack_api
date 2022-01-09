@@ -97,6 +97,7 @@ github.com/google/uuid v1.1.1/go.mod h1:TIyPZe4MgqvfeYDBFedMoGGpEw/LqOeaOT+nhxU+
 github.com/gopherjs/gopherjs v0.0.0-20181017120253-0766667cb4d1/go.mod h1:wJfORRmW1u3UXTncJ5qlYoELFm8eSnnEO6hX4iZ3EWY=
 github.com/gopherjs/gopherjs v0.0.0-20190915194858-d3ddacdb130f/go.mod h1:wJfORRmW1u3UXTncJ5qlYoELFm8eSnnEO6hX4iZ3EWY=
 github.com/gorilla/mux v1.7.3/go.mod h1:1lud6UwP+6orDFRuTfBEV8e9/aOM/c4fVVCaMa2zaAs=
+github.com/gorilla/mux v1.7.4/go.mod h1:DVbg23sWSpFRCP0SfiEN6jmj59UnW/n46BH5rLB71So=
 github.com/gorilla/mux v1.8.0 h1:i40aqfkR1h2SlN9hojwV5ZA91wcXFOvkdNIeFDP5koI=
 github.com/gorilla/mux v1.8.0/go.mod h1:DVbg23sWSpFRCP0SfiEN6jmj59UnW/n46BH5rLB71So=
 github.com/gorilla/websocket v1.4.0/go.mod h1:E7qHFY5m1UJ88s3WnNqhKjPHQ0heANvMoAMk2YaljkQ=
@@ -190,6 +191,8 @@ github.com/rebel-l/schema v1.2.0 h1:jIqG9JRWe8Zm5bMAU4W00oQ3M9JYvFiL+t9+gSg1QbM=
 github.com/rebel-l/schema v1.2.0/go.mod h1:4SXsmRHqo8YCIXSXyAdA9eFITDQEzgwJqcFTFceHutk=
 github.com/rebel-l/smis v0.3.1 h1:gwZP47EUE7kUoNp8sUaFoV6iwXF7wBexXFcK7hi1uAI=
 github.com/rebel-l/smis v0.3.1/go.mod h1:A4G97S7u2tHCgHObRS4tnss2hQP0/w3oIynay1oeZSc=
+github.com/rebel-l/smis v0.4.0-alpha.5 h1:ry8LkEjqZ/t7aWPYVQn2qxUafNJoa8+2tYjMXWm/xRM=
+github.com/rebel-l/smis v0.4.0-alpha.5/go.mod h1:e32RFHWife3r8flDWvXSXPNxCfIPwNIRyd+ZtDOPErE=
 github.com/rogpeppe/fastuuid v0.0.0-20150106093220-6724a57986af/go.mod h1:XWv6SoW27p1b0cqNHllgS5HIMJraePCO15w5zCzIWYg=
 github.com/rogpeppe/go-internal v1.3.0/go.mod h1:M8bDsm7K2OlrFYOpmOWEs/qY81heoFRclV5y23lUDJ4=
 github.com/rogpeppe/go-internal v1.3.2/go.mod h1:xXDCJY+GAPziupqXw64V24skbSoqbTEfhy4qGm1nDQc=

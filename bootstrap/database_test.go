@@ -47,7 +47,7 @@ func TestDatabase(t *testing.T) {
 	fixtures := slice.StringSlice{ // TODO: where to get this list of tables from?
 		"schema_script",
 		"sqlite_sequence",
-		"works",
+		"timelogs",
 	}
 
 	// 1. setup

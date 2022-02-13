@@ -95,6 +95,8 @@ func TestMapper_Load(t *testing.T) {
 
 	mapper := timelogmapper.New(db)
 
+	testTime := testingutils.TimeParse("2006-01-02T15:04:05.999999999Z07:00", "2022-01-09T22:21:59.5244444+01:00")
+
 	// 2. test
 	testCases := []struct {
 		name        string
@@ -107,13 +109,13 @@ func TestMapper_Load(t *testing.T) {
 			name: "success",
 			prepare: &timelogmodel.Timelog{
 				Start:    testingutils.TimeParse("2006-01-02T15:04:05.999999999Z07:00", "2022-01-09T22:21:59.5244444+01:00"),
-				Stop:     testingutils.TimeParse("2006-01-02T15:04:05.999999999Z07:00", "2022-01-09T22:21:59.5244444+01:00"),
+				Stop:     &testTime,
 				Reason:   "gJ5bvmhH7n69mYJnrrFdreh",
 				Location: "gXlRC",
 			},
 			expected: &timelogmodel.Timelog{
 				Start:    testingutils.TimeParse("2006-01-02T15:04:05.999999999Z07:00", "2022-01-09T22:21:59.5244444+01:00"),
-				Stop:     testingutils.TimeParse("2006-01-02T15:04:05.999999999Z07:00", "2022-01-09T22:21:59.5244444+01:00"),
+				Stop:     &testTime,
 				Reason:   "gJ5bvmhH7n69mYJnrrFdreh",
 				Location: "gXlRC",
 			},
@@ -170,6 +172,8 @@ func TestMapper_Save(t *testing.T) {
 
 	mapper := timelogmapper.New(db)
 
+	testTime := testingutils.TimeParse("2006-01-02T15:04:05.999999999Z07:00", "2022-01-09T22:21:59.5244444+01:00")
+
 	// 2. test
 	testCases := []struct {
 		name        string
@@ -187,13 +191,13 @@ func TestMapper_Save(t *testing.T) {
 			name: "model has no ID",
 			actual: &timelogmodel.Timelog{
 				Start:    testingutils.TimeParse("2006-01-02T15:04:05.999999999Z07:00", "2022-01-09T22:21:59.5244444+01:00"),
-				Stop:     testingutils.TimeParse("2006-01-02T15:04:05.999999999Z07:00", "2022-01-09T22:21:59.5244444+01:00"),
+				Stop:     &testTime,
 				Reason:   "gRPoU4fIqsE98Vg4OXV7ZBI3YpbW3V",
 				Location: "mMGzBfuUMS0n7MI8",
 			},
 			expected: &timelogmodel.Timelog{
 				Start:    testingutils.TimeParse("2006-01-02T15:04:05.999999999Z07:00", "2022-01-09T22:21:59.5244444+01:00"),
-				Stop:     testingutils.TimeParse("2006-01-02T15:04:05.999999999Z07:00", "2022-01-09T22:21:59.5244444+01:00"),
+				Stop:     &testTime,
 				Reason:   "gRPoU4fIqsE98Vg4OXV7ZBI3YpbW3V",
 				Location: "mMGzBfuUMS0n7MI8",
 			},
@@ -202,19 +206,19 @@ func TestMapper_Save(t *testing.T) {
 			name: "model has ID",
 			prepare: &timelogmodel.Timelog{
 				Start:    testingutils.TimeParse("2006-01-02T15:04:05.999999999Z07:00", "2022-01-09T22:21:59.5244444+01:00"),
-				Stop:     testingutils.TimeParse("2006-01-02T15:04:05.999999999Z07:00", "2022-01-09T22:21:59.5244444+01:00"),
+				Stop:     &testTime,
 				Reason:   "NJlSJ5t",
 				Location: "DnTTVROZ2dneNsNxE",
 			},
 			actual: &timelogmodel.Timelog{
 				Start:    testingutils.TimeParse("2006-01-02T15:04:05.999999999Z07:00", "2022-01-09T22:21:59.5244444+01:00"),
-				Stop:     testingutils.TimeParse("2006-01-02T15:04:05.999999999Z07:00", "2022-01-09T22:21:59.5244444+01:00"),
+				Stop:     &testTime,
 				Reason:   "NJlSJ5t",
 				Location: "DnTTVROZ2dneNsNxE",
 			},
 			expected: &timelogmodel.Timelog{
 				Start:    testingutils.TimeParse("2006-01-02T15:04:05.999999999Z07:00", "2022-01-09T22:21:59.5244444+01:00"),
-				Stop:     testingutils.TimeParse("2006-01-02T15:04:05.999999999Z07:00", "2022-01-09T22:21:59.5244444+01:00"),
+				Stop:     &testTime,
 				Reason:   "NJlSJ5t",
 				Location: "DnTTVROZ2dneNsNxE",
 			},
@@ -224,7 +228,7 @@ func TestMapper_Save(t *testing.T) {
 			actual: &timelogmodel.Timelog{
 				ID:       testingutils.UUIDParse(t, "7bef48b3-ec44-4bfa-9d76-52351a4a08ff"),
 				Start:    testingutils.TimeParse("2006-01-02T15:04:05.999999999Z07:00", "2022-01-09T22:21:59.5244444+01:00"),
-				Stop:     testingutils.TimeParse("2006-01-02T15:04:05.999999999Z07:00", "2022-01-09T22:21:59.5244444+01:00"),
+				Stop:     &testTime,
 				Reason:   "hlVhuo8v7Pre897zTYH3cCyt",
 				Location: "Ks5vh2SnPX0",
 			},
@@ -282,6 +286,8 @@ func TestMapper_Delete(t *testing.T) {
 
 	mapper := timelogmapper.New(db)
 
+	testTime := testingutils.TimeParse("2006-01-02T15:04:05.999999999Z07:00", "2022-01-09T22:21:59.524966+01:00")
+
 	// 2. test
 	testCases := []struct {
 		name        string
@@ -293,7 +299,7 @@ func TestMapper_Delete(t *testing.T) {
 			name: "success",
 			prepare: &timelogmodel.Timelog{
 				Start:    testingutils.TimeParse("2006-01-02T15:04:05.999999999Z07:00", "2022-01-09T22:21:59.524966+01:00"),
-				Stop:     testingutils.TimeParse("2006-01-02T15:04:05.999999999Z07:00", "2022-01-09T22:21:59.524966+01:00"),
+				Stop:     &testTime,
 				Reason:   "mgt6EDzh5dIOUWJbZioto6i",
 				Location: "3nPDy54NTbO3",
 			},
@@ -340,6 +346,8 @@ func TestMapper_Delete(t *testing.T) {
 func TestMapper_StoreToModel(t *testing.T) {
 	t.Parallel()
 
+	testTime := testingutils.TimeParse("2006-01-02T15:04:05.999999999Z07:00", "2022-01-09T22:21:59.524966+01:00")
+
 	testCases := []struct {
 		name     string
 		actual   *timelogstore.Timelog
@@ -354,14 +362,14 @@ func TestMapper_StoreToModel(t *testing.T) {
 			actual: &timelogstore.Timelog{
 				ID:       testingutils.UUIDParse(t, "6fd7a340-e733-41fc-800f-24da25f20a81"),
 				Start:    testingutils.TimeParse("2006-01-02T15:04:05.999999999Z07:00", "2022-01-09T22:21:59.524966+01:00"),
-				Stop:     testingutils.TimeParse("2006-01-02T15:04:05.999999999Z07:00", "2022-01-09T22:21:59.524966+01:00"),
+				Stop:     &testTime,
 				Reason:   "JcUKO5AFnBrqHX0DfFeEuKvXLmS",
 				Location: "Y48thALSKldPWtv8",
 			},
 			expected: &timelogmodel.Timelog{
 				ID:       testingutils.UUIDParse(t, "6fd7a340-e733-41fc-800f-24da25f20a81"),
 				Start:    testingutils.TimeParse("2006-01-02T15:04:05.999999999Z07:00", "2022-01-09T22:21:59.524966+01:00"),
-				Stop:     testingutils.TimeParse("2006-01-02T15:04:05.999999999Z07:00", "2022-01-09T22:21:59.524966+01:00"),
+				Stop:     &testTime,
 				Reason:   "JcUKO5AFnBrqHX0DfFeEuKvXLmS",
 				Location: "Y48thALSKldPWtv8",
 			},
@@ -380,7 +388,7 @@ func TestMapper_StoreToModel(t *testing.T) {
 	}
 }
 
-func assertTimelog(t *testing.T, expected, actual *timelogmodel.Timelog) {
+func assertTimelog(t *testing.T, expected, actual *timelogmodel.Timelog) { // nolint: gocognit
 	t.Helper()
 
 	if expected == nil && actual == nil {
@@ -401,7 +409,8 @@ func assertTimelog(t *testing.T, expected, actual *timelogmodel.Timelog) {
 		t.Errorf("expected Start %s but got %s", expected.Start, actual.Start)
 	}
 
-	if !expected.Stop.Equal(actual.Stop) {
+	if expected.Stop != nil && actual.Stop != nil && !expected.Stop.Equal(*actual.Stop) ||
+		expected.Stop == nil && actual.Stop != nil || expected.Stop != nil && actual.Stop == nil {
 		t.Errorf("expected Stop %s but got %s", expected.Stop, actual.Stop)
 	}
 

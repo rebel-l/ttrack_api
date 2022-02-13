@@ -27,13 +27,13 @@ var (
 
 // Timelog represents the timelog in the database.
 type Timelog struct {
-	ID         uuid.UUID `db:"id"`
-	Start      time.Time `db:"start"`
-	Stop       time.Time `db:"stop"`
-	Reason     string    `db:"reason"`
-	Location   string    `db:"location"`
-	CreatedAt  time.Time `db:"created_at"`
-	ModifiedAt time.Time `db:"modified_at"`
+	ID         uuid.UUID  `db:"id"`
+	Start      time.Time  `db:"start"`
+	Stop       *time.Time `db:"stop"`
+	Reason     string     `db:"reason"`
+	Location   string     `db:"location"`
+	CreatedAt  time.Time  `db:"created_at"`
+	ModifiedAt time.Time  `db:"modified_at"`
 }
 
 // Create creates current object in the database.

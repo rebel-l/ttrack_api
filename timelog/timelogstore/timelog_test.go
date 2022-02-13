@@ -66,6 +66,8 @@ func TestTimelog_Create(t *testing.T) {
 		}
 	})
 
+	testTime := testingutils.TimeParse("2006-01-02T15:04:05.999999999Z07:00", "2022-01-09T22:21:59.5171183+01:00")
+
 	// 2. test
 	testCases := []struct {
 		name        string
@@ -80,7 +82,7 @@ func TestTimelog_Create(t *testing.T) {
 		{
 			name: "timelog has stop only",
 			actual: &timelogstore.Timelog{
-				Stop: testingutils.TimeParse("2006-01-02T15:04:05.999999999Z07:00", "2022-01-09T22:21:59.5171183+01:00"),
+				Stop: &testTime,
 			},
 			expectedErr: timelogstore.ErrDataMissing,
 		},
@@ -89,7 +91,7 @@ func TestTimelog_Create(t *testing.T) {
 			actual: &timelogstore.Timelog{
 				ID:       testingutils.UUIDParse(t, "befaea68-6ae2-435f-a47c-0e247c9976b4"),
 				Start:    testingutils.TimeParse("2006-01-02T15:04:05.999999999Z07:00", "2022-01-09T22:21:59.5171183+01:00"),
-				Stop:     testingutils.TimeParse("2006-01-02T15:04:05.999999999Z07:00", "2022-01-09T22:21:59.5171183+01:00"),
+				Stop:     &testTime,
 				Reason:   "a6N2b8bwM9Lbgey",
 				Location: "Lg036olw0Q",
 			},
@@ -99,13 +101,13 @@ func TestTimelog_Create(t *testing.T) {
 			name: "timelog has all fields set",
 			actual: &timelogstore.Timelog{
 				Start:    testingutils.TimeParse("2006-01-02T15:04:05.999999999Z07:00", "2022-01-09T22:21:59.5171183+01:00"),
-				Stop:     testingutils.TimeParse("2006-01-02T15:04:05.999999999Z07:00", "2022-01-09T22:21:59.5171183+01:00"),
+				Stop:     &testTime,
 				Reason:   "o55jR",
 				Location: "pNDJG",
 			},
 			expected: &timelogstore.Timelog{
 				Start:    testingutils.TimeParse("2006-01-02T15:04:05.999999999Z07:00", "2022-01-09T22:21:59.5171183+01:00"),
-				Stop:     testingutils.TimeParse("2006-01-02T15:04:05.999999999Z07:00", "2022-01-09T22:21:59.5171183+01:00"),
+				Stop:     &testTime,
 				Reason:   "o55jR",
 				Location: "pNDJG",
 			},
@@ -157,6 +159,8 @@ func TestTimelog_Read(t *testing.T) {
 		}
 	})
 
+	testTime := testingutils.TimeParse("2006-01-02T15:04:05.999999999Z07:00", "2022-01-09T22:21:59.5171183+01:00")
+
 	// 2. test
 	testCases := []struct {
 		name        string
@@ -176,13 +180,13 @@ func TestTimelog_Read(t *testing.T) {
 			name: "success",
 			prepare: &timelogstore.Timelog{
 				Start:    testingutils.TimeParse("2006-01-02T15:04:05.999999999Z07:00", "2022-01-09T22:21:59.5176385+01:00"),
-				Stop:     testingutils.TimeParse("2006-01-02T15:04:05.999999999Z07:00", "2022-01-09T22:21:59.5176385+01:00"),
+				Stop:     &testTime,
 				Reason:   "u90uSdRg",
 				Location: "hQEl5UELFQe9hXF1vPxc",
 			},
 			expected: &timelogstore.Timelog{
 				Start:    testingutils.TimeParse("2006-01-02T15:04:05.999999999Z07:00", "2022-01-09T22:21:59.5176385+01:00"),
-				Stop:     testingutils.TimeParse("2006-01-02T15:04:05.999999999Z07:00", "2022-01-09T22:21:59.5176385+01:00"),
+				Stop:     &testTime,
 				Reason:   "u90uSdRg",
 				Location: "hQEl5UELFQe9hXF1vPxc",
 			},
@@ -226,7 +230,7 @@ func TestTimelog_Read(t *testing.T) {
 	}
 }
 
-func assertTimelog(t *testing.T, expected, actual *timelogstore.Timelog) {
+func assertTimelog(t *testing.T, expected, actual *timelogstore.Timelog) { // nolint: gocognit
 	t.Helper()
 
 	if expected == nil && actual == nil {
@@ -247,7 +251,8 @@ func assertTimelog(t *testing.T, expected, actual *timelogstore.Timelog) {
 		t.Errorf("expected Start %s but got %s", expected.Start, actual.Start)
 	}
 
-	if !expected.Stop.Equal(actual.Stop) {
+	if expected.Stop != nil && actual.Stop != nil && !expected.Stop.Equal(*actual.Stop) ||
+		expected.Stop == nil && actual.Stop != nil || expected.Stop != nil && actual.Stop == nil {
 		t.Errorf("expected Stop %s but got %s", expected.Stop, actual.Stop)
 	}
 
@@ -284,6 +289,8 @@ func TestTimelog_Update(t *testing.T) {
 		}
 	})
 
+	testTime := testingutils.TimeParse("2006-01-02T15:04:05.999999999Z07:00", "2022-01-09T22:21:59.5186965+01:00")
+
 	// 2. test
 	testCases := []struct {
 		name        string
@@ -299,7 +306,7 @@ func TestTimelog_Update(t *testing.T) {
 		{
 			name: "timelog has stop only",
 			actual: &timelogstore.Timelog{
-				Stop: testingutils.TimeParse("2006-01-02T15:04:05.999999999Z07:00", "2022-01-09T22:21:59.5186965+01:00"),
+				Stop: &testTime,
 			},
 			expectedErr: timelogstore.ErrDataMissing,
 		},
@@ -307,7 +314,7 @@ func TestTimelog_Update(t *testing.T) {
 			name: "timelog has no id",
 			actual: &timelogstore.Timelog{
 				Start:    testingutils.TimeParse("2006-01-02T15:04:05.999999999Z07:00", "2022-01-09T22:21:59.5186965+01:00"),
-				Stop:     testingutils.TimeParse("2006-01-02T15:04:05.999999999Z07:00", "2022-01-09T22:21:59.5186965+01:00"),
+				Stop:     &testTime,
 				Reason:   "AUoO5KDOGsEi6FCN3tK7xzm",
 				Location: "I5FzQfgkuDVHpigHqN3M",
 			},
@@ -327,19 +334,19 @@ func TestTimelog_Update(t *testing.T) {
 			name: "timelog has all fields set",
 			actual: &timelogstore.Timelog{
 				Start:    testingutils.TimeParse("2006-01-02T15:04:05.999999999Z07:00", "2022-01-09T22:21:59.5186965+01:00"),
-				Stop:     testingutils.TimeParse("2006-01-02T15:04:05.999999999Z07:00", "2022-01-09T22:21:59.5186965+01:00"),
+				Stop:     &testTime,
 				Reason:   "jzaCnKKSRKmtLD3",
 				Location: "0rn6QkWPCIc",
 			},
 			prepare: &timelogstore.Timelog{
 				Start:    testingutils.TimeParse("2006-01-02T15:04:05.999999999Z07:00", "2022-01-09T22:21:59.5186965+01:00"),
-				Stop:     testingutils.TimeParse("2006-01-02T15:04:05.999999999Z07:00", "2022-01-09T22:21:59.5186965+01:00"),
+				Stop:     &testTime,
 				Reason:   "7ugUH7xdgUo9Wj68bo6ayKTQymKEy",
 				Location: "ZOn6KufVUxaotfkh",
 			},
 			expected: &timelogstore.Timelog{
 				Start:    testingutils.TimeParse("2006-01-02T15:04:05.999999999Z07:00", "2022-01-09T22:21:59.5186965+01:00"),
-				Stop:     testingutils.TimeParse("2006-01-02T15:04:05.999999999Z07:00", "2022-01-09T22:21:59.5186965+01:00"),
+				Stop:     &testTime,
 				Reason:   "jzaCnKKSRKmtLD3",
 				Location: "0rn6QkWPCIc",
 			},
@@ -420,6 +427,8 @@ func TestTimelog_Delete(t *testing.T) {
 		}
 	})
 
+	testTime := testingutils.TimeParse("2006-01-02T15:04:05.999999999Z07:00", "2022-01-09T22:21:59.5197509+01:00")
+
 	// 2. test
 	testCases := []struct {
 		name        string
@@ -438,7 +447,7 @@ func TestTimelog_Delete(t *testing.T) {
 			name: "success",
 			prepare: &timelogstore.Timelog{
 				Start:    testingutils.TimeParse("2006-01-02T15:04:05.999999999Z07:00", "2022-01-09T22:21:59.5197509+01:00"),
-				Stop:     testingutils.TimeParse("2006-01-02T15:04:05.999999999Z07:00", "2022-01-09T22:21:59.5197509+01:00"),
+				Stop:     &testTime,
 				Reason:   "YoElEQ",
 				Location: "9gSjvLOuLH35t9eqNmN",
 			},
@@ -486,6 +495,8 @@ func TestTimelog_Delete(t *testing.T) {
 func TestTimelog_IsValid(t *testing.T) {
 	t.Parallel()
 
+	testTime := testingutils.TimeParse("2006-01-02T15:04:05.999999999Z07:00", "2022-01-09T22:21:59.5197509+01:00")
+
 	testCases := []struct {
 		name     string
 		actual   *timelogstore.Timelog
@@ -512,7 +523,7 @@ func TestTimelog_IsValid(t *testing.T) {
 		{
 			name: "timelog has stop only",
 			actual: &timelogstore.Timelog{
-				Stop: testingutils.TimeParse("2006-01-02T15:04:05.999999999Z07:00", "2022-01-09T22:21:59.5197509+01:00"),
+				Stop: &testTime,
 			},
 			expected: false,
 		},
@@ -554,7 +565,7 @@ func TestTimelog_IsValid(t *testing.T) {
 			actual: &timelogstore.Timelog{
 				ID:       testingutils.UUIDParse(t, "2cfd9425-6ed4-4a06-9eab-eed2c818521f"),
 				Start:    testingutils.TimeParse("2006-01-02T15:04:05.999999999Z07:00", "2022-01-09T22:21:59.5197509+01:00"),
-				Stop:     testingutils.TimeParse("2006-01-02T15:04:05.999999999Z07:00", "2022-01-09T22:21:59.5197509+01:00"),
+				Stop:     &testTime,
 				Reason:   "ilKCRpvFg",
 				Location: "73NcOR7TOYhqOJEkMfE",
 			},
@@ -564,7 +575,7 @@ func TestTimelog_IsValid(t *testing.T) {
 			name: "all fields without id",
 			actual: &timelogstore.Timelog{
 				Start:    testingutils.TimeParse("2006-01-02T15:04:05.999999999Z07:00", "2022-01-09T22:21:59.5197509+01:00"),
-				Stop:     testingutils.TimeParse("2006-01-02T15:04:05.999999999Z07:00", "2022-01-09T22:21:59.5197509+01:00"),
+				Stop:     &testTime,
 				Reason:   "bUbRNYpgHt",
 				Location: "CZ7h874jfupnvww",
 			},

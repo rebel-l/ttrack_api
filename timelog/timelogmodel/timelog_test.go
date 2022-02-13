@@ -17,6 +17,8 @@ func TestTimelog_DecodeJSON(t *testing.T) {
 	createdAt, _ := time.Parse(time.RFC3339Nano, "2019-12-31T03:36:57.9167778+01:00")
 	modifiedAt, _ := time.Parse(time.RFC3339Nano, "2020-01-01T15:44:57.9168378+01:00")
 
+	testTime := testingutils.TimeParse("2006-01-02T15:04:05.999999999Z07:00", "2022-01-09T22:21:59.5218364+01:00")
+
 	testCases := []struct {
 		name        string
 		actual      *timelogmodel.Timelog
@@ -51,7 +53,7 @@ func TestTimelog_DecodeJSON(t *testing.T) {
 			expected: &timelogmodel.Timelog{
 				ID:         testingutils.UUIDParse(t, "1cbe5ff0-332a-4118-baf3-877cb70e984e"),
 				Start:      testingutils.TimeParse("2006-01-02T15:04:05.999999999Z07:00", "2022-01-09T22:21:59.5218364+01:00"),
-				Stop:       testingutils.TimeParse("2006-01-02T15:04:05.999999999Z07:00", "2022-01-09T22:21:59.5218364+01:00"),
+				Stop:       &testTime,
 				Reason:     "jhLQzmBNjLE74Gl",
 				Location:   "UGPX68UzOx9oqx",
 				CreatedAt:  createdAt,
@@ -100,11 +102,12 @@ func assertTimelog(t *testing.T, expected, actual *timelogmodel.Timelog) {
 		t.Errorf("expected ID %s but got %s", expected.ID, actual.ID)
 	}
 
-	if expected.Start != actual.Start {
+	if !expected.Start.Equal(actual.Start) {
 		t.Errorf("expected Start %s but got %s", expected.Start, actual.Start)
 	}
 
-	if expected.Stop != actual.Stop {
+	if expected.Stop != nil && actual.Stop != nil && !expected.Stop.Equal(*actual.Stop) ||
+		expected.Stop == nil && actual.Stop != nil || expected.Stop != nil && actual.Stop == nil {
 		t.Errorf("expected Stop %s but got %s", expected.Stop, actual.Stop)
 	}
 

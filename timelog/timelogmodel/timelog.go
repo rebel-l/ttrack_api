@@ -42,13 +42,13 @@ var (
 
 // Timelog represents a model of repository including business logic.
 type Timelog struct {
-	ID         uuid.UUID `json:"ID"`
-	Start      time.Time `json:"Start"`
-	Stop       time.Time `json:"Stop"`
-	Reason     string    `json:"Reason"`
-	Location   string    `json:"Location"`
-	CreatedAt  time.Time `json:"CreatedAt"`
-	ModifiedAt time.Time `json:"ModifiedAt"`
+	ID         uuid.UUID  `json:"ID"`
+	Start      time.Time  `json:"Start"`
+	Stop       *time.Time `json:"Stop,omitempty"`
+	Reason     string     `json:"Reason"`
+	Location   string     `json:"Location"`
+	CreatedAt  time.Time  `json:"CreatedAt"`
+	ModifiedAt time.Time  `json:"ModifiedAt"`
 }
 
 // DecodeJSON converts JSON data to struct.

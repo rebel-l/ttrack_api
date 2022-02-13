@@ -29,6 +29,15 @@ var (
 	// ErrDecodeJSON occurs if a string is not in JSON format.
 	ErrDecodeJSON = errors.New("failed to decode JSON")
 
+	// ErrValidationStartMandatory occurs during validation if the Start time wasn't set.
+	ErrValidationStartMandatory = fmt.Errorf("start time should not be empty")
+
+	// ErrValidationInvalidLocation occurs during validation if the location is not one of the known ones.
+	ErrValidationInvalidLocation = fmt.Errorf("location must be one of the following values")
+
+	// ErrValidationInvalidReason occurs during validation if the reason is not one of the known ones.
+	ErrValidationInvalidReason = fmt.Errorf("reason must be one of the following values")
+
 	locations = slice.StringSlice{
 		LocationHome,
 		LocationOffice,
@@ -69,15 +78,15 @@ func (t *Timelog) DecodeJSON(reader io.Reader) error {
 // why it failed in the error message.
 func (t *Timelog) Validate() error {
 	if t.Start.IsZero() {
-		return fmt.Errorf("start time should not be empty")
+		return ErrValidationStartMandatory
 	}
 
 	if locations.IsNotIn(t.Location) {
-		return fmt.Errorf("location must be one of the following values: %s", locations.String())
+		return fmt.Errorf("%w: %s", ErrValidationInvalidLocation, locations.String())
 	}
 
 	if reasons.IsNotIn(t.Reason) {
-		return fmt.Errorf("reason must be one of the following values: %s", reasons.String())
+		return fmt.Errorf("%w: %s", ErrValidationInvalidReason, reasons.String())
 	}
 
 	return nil

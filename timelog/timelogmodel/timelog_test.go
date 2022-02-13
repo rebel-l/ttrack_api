@@ -85,7 +85,7 @@ func TestTimelog_DecodeJSON(t *testing.T) {
 	}
 }
 
-func assertTimelog(t *testing.T, expected, actual *timelogmodel.Timelog) {
+func assertTimelog(t *testing.T, expected, actual *timelogmodel.Timelog) { // nolint: gocognit
 	t.Helper()
 
 	if expected == nil && actual == nil {

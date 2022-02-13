@@ -12,7 +12,9 @@ import (
 	"github.com/gorilla/mux"
 	"github.com/jmoiron/sqlx"
 	_ "github.com/mattn/go-sqlite3"
+	"github.com/rebel-l/go-utils/slice"
 	"github.com/rebel-l/smis"
+	"github.com/rebel-l/smis/middleware/cors"
 	"github.com/rebel-l/ttrack_api/bootstrap"
 	"github.com/rebel-l/ttrack_api/config"
 	"github.com/rebel-l/ttrack_api/endpoint/doc"
@@ -22,9 +24,10 @@ import (
 )
 
 const (
-	defaultPort    = 3000
-	defaultTimeout = 15 * time.Second
-	version        = "0.1.0"
+	defaultPort               = 3000
+	defaultTimeout            = 15 * time.Second
+	defaultAccesControlMaxAge = 86400 // 24 Hours
+	version                   = "0.1.0"
 )
 
 var (
@@ -56,6 +59,13 @@ func initCustom() error {
 }
 
 func initCustomRoutes() error {
+	c := cors.Config{
+		AccessControlAllowOrigins: slice.StringSlice{"*"},
+		AccessControlAllowHeaders: slice.StringSlice{"*"},
+		AccessControlMaxAge:       defaultAccesControlMaxAge,
+	}
+	svc.WithDefaultMiddleware(c)
+
 	/**
 	  3. Register your custom routes below
 	*/

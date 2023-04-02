@@ -4,23 +4,17 @@ import (
 	"io"
 	"net/http"
 
-	"github.com/jmoiron/sqlx"
+	"github.com/gorilla/mux"
 	"github.com/rebel-l/smis"
 	"github.com/rebel-l/ttrack_api/timelog/timelogmapper"
-	"github.com/rebel-l/ttrack_api/timelog/timelogmodel"
 	"github.com/sirupsen/logrus"
 )
 
-type timelog struct {
-	db  *sqlx.DB
-	svc *smis.Service
-}
-
-func (t *timelog) upsert(writer http.ResponseWriter, request *http.Request) {
+func (t *timelog) loadByRange(writer http.ResponseWriter, request *http.Request) {
 	log := t.svc.NewLogForRequestID(request.Context())
 	response := smis.Response{Log: log}
 
-	if writer == nil || request == nil || request.Body == nil {
+	if writer == nil || request == nil {
 		response.WriteJSONError(writer, smis.Error{
 			StatusCode: http.StatusBadRequest,
 			Code:       "",
@@ -39,18 +33,28 @@ func (t *timelog) upsert(writer http.ResponseWriter, request *http.Request) {
 		}
 	}(log, request.Body)
 
-	model := &timelogmodel.Timelog{} // nolint: exhaustivestruct
-	if err := model.DecodeJSON(request.Body); err != nil {
-		response.WriteJSONError(writer, smis.ErrResponseJSONConversion.WithDetails(err))
+	vars := mux.Vars(request)
+	start, ok := vars["start"]
+	if !ok {
+		response.WriteJSONError(writer, smis.Error{
+			StatusCode: http.StatusBadRequest,
+			Code:       "",
+			External:   "no start defined",
+			Internal:   "no start defined",
+			Details:    nil,
+		})
 
 		return
 	}
 
-	if err := model.Validate(); err != nil {
-		response.WriteJSONError(writer, smis.Error{ // nolint: exhaustivestruct
+	stop, ok := vars["stop"]
+	if !ok {
+		response.WriteJSONError(writer, smis.Error{
 			StatusCode: http.StatusBadRequest,
-			Code:       "VALIDATION",
-			External:   err.Error(),
+			Code:       "",
+			External:   "no stop defined",
+			Internal:   "no stop defined",
+			Details:    nil,
 		})
 
 		return
@@ -58,13 +62,13 @@ func (t *timelog) upsert(writer http.ResponseWriter, request *http.Request) {
 
 	mapper := timelogmapper.New(t.db)
 
-	model, err := mapper.Save(request.Context(), model)
+	model, err := mapper.LoadByDateRange(request.Context(), start, stop)
 	if err != nil {
 		response.WriteJSONError(writer, smis.Error{
 			StatusCode: http.StatusInternalServerError,
-			Code:       "SAVE",
-			External:   "failed to save timelog",
-			Internal:   "failed to save timelog",
+			Code:       "",
+			External:   "failed to load time logs",
+			Internal:   "failed to load time logs",
 			Details:    err,
 		})
 

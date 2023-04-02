@@ -11,6 +11,13 @@ import (
 	"github.com/rebel-l/go-utils/uuidutils"
 )
 
+const (
+	qSelect = `
+		SELECT id, start, stop, reason, location, created_at, modified_at
+        FROM timelogs
+	`
+)
+
 var (
 	// ErrIDMissing will be thrown if an ID is expected but not set.
 	ErrIDMissing = errors.New("id is mandatory for this operation")
@@ -72,9 +79,8 @@ func (t *Timelog) Read(ctx context.Context, db *sqlx.DB) error {
 		return ErrIDMissing
 	}
 
-	q := db.Rebind(`
-        SELECT id, start, stop, reason, location, created_at, modified_at
-        FROM timelogs
+	q := db.Rebind(
+		qSelect + `
         WHERE id = ?;
     `)
 	if err := db.GetContext(ctx, t, q, t.ID); err != nil {

@@ -63,8 +63,8 @@ func initCustomRoutes() error {
 		AccessControlAllowOrigins: slice.StringSlice{"*"},
 		AccessControlAllowHeaders: slice.StringSlice{"*"},
 		AccessControlMaxAge:       defaultAccesControlMaxAge,
-	}
-	svc.WithDefaultMiddleware(c)
+	} // TODO: make it configurable
+	svc.WithDefaultMiddleware(c) // TODO: add catch panic middleware to default
 
 	/**
 	  3. Register your custom routes below

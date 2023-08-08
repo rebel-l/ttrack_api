@@ -12,6 +12,9 @@ import (
 )
 
 const (
+	// LocationAbsence defines a pseudo-location to show absences. It means timelog doesn't belong anywhere.
+	LocationAbsence = "absence"
+
 	// LocationHome defines the possible value for the homeoffice location. It means timelog happened at home.
 	LocationHome = "home"
 
@@ -23,6 +26,12 @@ const (
 
 	// ReasonWork defines the value for the timelog reason that this entry is work time.
 	ReasonWork = "work"
+
+	// ReasonSickLeave defines the value for the timelog reason that this entry is sick leave.
+	ReasonSickLeave = "sick leave"
+
+	// ReasonVacation defines the value for the timelog reason that this entry is vacation.
+	ReasonVacation = "vacation"
 )
 
 var (
@@ -39,6 +48,7 @@ var (
 	ErrValidationInvalidReason = fmt.Errorf("reason must be one of the following values")
 
 	locations = slice.StringSlice{
+		LocationAbsence,
 		LocationHome,
 		LocationOffice,
 	}
@@ -46,6 +56,8 @@ var (
 	reasons = slice.StringSlice{
 		ReasonWork,
 		ReasonBreak,
+		ReasonVacation,
+		ReasonSickLeave,
 	}
 )
 

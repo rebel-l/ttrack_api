@@ -28,6 +28,8 @@
     "linters": {
         "enable-all": true,
         "disable": [
+            "depguard",
+
             "deadcode",
             "exhaustivestruct",
             "gochecknoglobals",

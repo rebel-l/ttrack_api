@@ -28,6 +28,9 @@ var (
 
 	// ErrNotFound occurs if record doesn't exist in database.
 	ErrNotFound = errors.New("timelog was not found")
+
+	// ErrConvert occurs if data type conversion failed.
+	ErrConvert = errors.New("conversion error")
 )
 
 // Mapper provides methods to load and persist timelog models.

@@ -19,6 +19,7 @@ import (
 	"github.com/rebel-l/ttrack_api/config"
 	"github.com/rebel-l/ttrack_api/endpoint/doc"
 	"github.com/rebel-l/ttrack_api/endpoint/ping"
+	"github.com/rebel-l/ttrack_api/endpoint/reports"
 	"github.com/rebel-l/ttrack_api/endpoint/timelogs"
 	"github.com/sirupsen/logrus"
 )
@@ -71,6 +72,10 @@ func initCustomRoutes() error {
 	*/
 	if err := timelogs.Init(svc, db); err != nil {
 		return fmt.Errorf("failed to init the timelogs endpoints: %w", err)
+	}
+
+	if err := reports.Init(svc, db); err != nil {
+		return fmt.Errorf("failed to init the reports endpoints: %w", err)
 	}
 
 	return nil

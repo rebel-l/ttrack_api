@@ -42,13 +42,13 @@ fi
 echo
 echo -en "\E[40;34m\033[1mInstall: golangci-lint\033[0m"
 echo
-go get -u github.com/golangci/golangci-lint/cmd/golangci-lint
+curl -sSfL https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh | sh -s -- -b $(go env GOPATH)/bin v1.57.0
 
 # install goconvey
 echo
 echo -en "\E[40;34m\033[1mInstall: goconvey\033[0m"
 echo
-go get -u github.com/smartystreets/goconvey
+go install github.com/smartystreets/goconvey
 
 # install gomock
 echo

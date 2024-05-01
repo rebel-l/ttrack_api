@@ -8,10 +8,15 @@ import (
 )
 
 // Init initializes the endpoints regarding reports.
+// nolint: wrapcheck,nolintlint
 func Init(svc *smis.Service, db *sqlx.DB) error {
 	endpoint := &reports{db: db, svc: svc}
 
-	_, err := svc.RegisterEndpoint("/reports/options", http.MethodGet, endpoint.options)
+	if _, err := svc.RegisterEndpoint("/reports/options", http.MethodGet, endpoint.options); err != nil {
+		return err
+	}
 
-	return err //nolint: wrapcheck
+	_, err := svc.RegisterEndpoint("/reports/{year}", http.MethodGet, endpoint.reports)
+
+	return err
 }

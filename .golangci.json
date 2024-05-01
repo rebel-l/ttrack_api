@@ -45,6 +45,9 @@
         ]
     },
     "linters-settings": {
+        "funlen": {
+            "lines": 100
+        },
         "varnamelen": {
             "max-distance": 30
         }

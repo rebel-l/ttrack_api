@@ -6,11 +6,11 @@ const oneDay = 24 * time.Hour
 
 // Report represents all the values to present a proper yearly report of timelogs.
 type Report struct {
-	Year           int       `json:"year"`
-	DaysInYear     int       `json:"days_in_year"`
-	WorkDaysInYear int       `json:"work_days_in_year"`
-	FirstDayOfYear time.Time `json:"first_day_of_year"`
-	LastDayOfYear  time.Time `json:"last_day_of_year"`
+	Year           int       `json:"Year"`
+	DaysInYear     int       `json:"DaysInYear"`
+	WorkDaysInYear int       `json:"WorkDaysInYear"`
+	FirstDayOfYear time.Time `json:"FirstDayOfYear"`
+	LastDayOfYear  time.Time `json:"LastDayOfYear"`
 }
 
 // NewReport returns you a Report struct initialized by a given year. Based on the year it calculates first and last

@@ -1,12 +1,15 @@
 package publicholiday
 
 import (
-	"github.com/rebel-l/ttrack_api/publicholiday/publicholidaymapper"
+	"encoding/json"
+	"fmt"
 	"io"
 	"net/http"
 
 	"github.com/jmoiron/sqlx"
 	"github.com/rebel-l/smis"
+	"github.com/rebel-l/ttrack_api/publicholiday/publicholidaymapper"
+	"github.com/rebel-l/ttrack_api/publicholiday/publicholidaymodel"
 	"github.com/sirupsen/logrus"
 )
 
@@ -38,7 +41,7 @@ func (p *publicHoliday) loadAll(writer http.ResponseWriter, request *http.Reques
 			}
 		}
 	}(log, request.Body)
-	//
+
 	mapper := publicholidaymapper.New(p.db)
 
 	model, err := mapper.LoadAll(request.Context())
@@ -80,6 +83,18 @@ func (p *publicHoliday) save(writer http.ResponseWriter, request *http.Request) 
 			}
 		}
 	}(log, request.Body)
+
+	var models []*publicholidaymodel.PublicHoliday // nolint: exhaustivestruct
+	decoder := json.NewDecoder(request.Body)
+	if err := decoder.Decode(&models); err != nil {
+		response.WriteJSONError(writer, smis.ErrResponseJSONConversion.WithDetails(err))
+
+		return
+	}
+
+	for _, v := range models {
+		fmt.Println(v) // TODO: remove
+	}
 
 	// TODO: implement
 }

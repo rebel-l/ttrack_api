@@ -11,14 +11,14 @@ import (
 	"github.com/rebel-l/ttrack_api/publicholiday/publicholidaystore"
 )
 
-func (m *Mapper) LoadAll(ctx context.Context) (publicholidaymodel.PublicHolidays, error) {
+func (m *Mapper) LoadAll(ctx context.Context) (publicholidaymodel.PublicHolidaysByYear, error) {
 	s := &publicholidaystore.PublicHolidays{}
 
 	if err := s.Load(ctx, m.db, ""); err != nil {
 		return nil, fmt.Errorf("%w: %v", ErrLoadFromDB, err)
 	}
 
-	models := make(publicholidaymodel.PublicHolidays)
+	models := make(publicholidaymodel.PublicHolidaysByYear)
 	for _, v := range *s {
 		m := StoreToModel(v)
 

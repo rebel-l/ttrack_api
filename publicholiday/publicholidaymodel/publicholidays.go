@@ -2,4 +2,4 @@ package publicholidaymodel
 
 type Year int
 
-type PublicHolidays map[Year][]*PublicHoliday
+type PublicHolidaysByYear map[Year][]*PublicHoliday

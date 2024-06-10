@@ -48,6 +48,7 @@ func TestDatabase(t *testing.T) {
 		"schema_script",
 		"sqlite_sequence",
 		"timelogs",
+		"publicholidays",
 	}
 
 	// 1. setup

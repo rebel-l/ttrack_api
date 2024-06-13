@@ -36,16 +36,17 @@ func (m *Mapper) LoadAll(ctx context.Context) (publicholidaymodel.PublicHolidays
 		return nil, fmt.Errorf("%w: %v", timelogmapper.ErrLoadFromDB, err)
 	}
 
-	for i, year := range tYears {
+	for _, year := range tYears {
 		y := publicholidaymodel.Year(year)
 		if _, ok := models[y]; !ok {
 			models[y] = []*publicholidaymodel.PublicHoliday{}
 		}
+	}
 
-		// add a year in the future
-		if i == len(tYears)-1 && year == time.Now().Year() {
-			models[publicholidaymodel.Year(year+1)] = []*publicholidaymodel.PublicHoliday{}
-		}
+	// add a year in the future
+	nextYear := publicholidaymodel.Year(time.Now().Year() + 1)
+	if _, ok := models[nextYear]; !ok {
+		models[nextYear] = []*publicholidaymodel.PublicHoliday{}
 	}
 
 	return models, nil

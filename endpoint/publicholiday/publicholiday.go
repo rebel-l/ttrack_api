@@ -2,7 +2,6 @@ package publicholiday
 
 import (
 	"encoding/json"
-	"fmt"
 	"io"
 	"net/http"
 
@@ -87,14 +86,26 @@ func (p *publicHoliday) save(writer http.ResponseWriter, request *http.Request) 
 	var models []*publicholidaymodel.PublicHoliday // nolint: exhaustivestruct
 	decoder := json.NewDecoder(request.Body)
 	if err := decoder.Decode(&models); err != nil {
-		response.WriteJSONError(writer, smis.ErrResponseJSONConversion.WithDetails(err))
-
+		response.WriteJSONError(writer, smis.ErrResponseJSONConversion.WithDetails(err)) // TODO: maybe custom error?
 		return
 	}
 
-	for _, v := range models {
-		fmt.Println(v) // TODO: remove
+	for i, v := range models {
+		var err error
+
+		mapper := publicholidaymapper.New(p.db)
+		models[i], err = mapper.Save(request.Context(), v)
+		if err != nil {
+			response.WriteJSONError(writer, smis.ErrResponseJSONConversion.WithDetails(err)) // TODO: maybe custom error?
+			return
+		}
 	}
 
-	// TODO: implement
+	model := make(publicholidaymodel.PublicHolidaysByYear)
+	if len(models) > 0 {
+		year := publicholidaymodel.Year(models[0].Day.Year())
+		model[year] = models
+	}
+
+	response.WriteJSON(writer, http.StatusOK, model)
 }

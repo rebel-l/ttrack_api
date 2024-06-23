@@ -66,7 +66,7 @@ func (p *publicHoliday) save(writer http.ResponseWriter, request *http.Request) 
 	if writer == nil {
 		response.WriteJSONError(writer, smis.Error{
 			StatusCode: http.StatusBadRequest,
-			Code:       "",
+			Code:       "PHL-SAVE",
 			External:   "request could not be handled",
 			Internal:   "writer is nil",
 			Details:    nil,

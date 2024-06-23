@@ -51,3 +51,18 @@ func (m *Mapper) LoadAll(ctx context.Context) (publicholidaymodel.PublicHolidays
 
 	return models, nil
 }
+
+func (m *Mapper) LoadByYear(ctx context.Context, year int) (publicholidaymodel.PublicHolidays, error) {
+	s := &publicholidaystore.PublicHolidays{}
+
+	if err := s.Load(ctx, m.db, "strftime('%Y', day) = ?", fmt.Sprintf("%d", year)); err != nil {
+		return nil, fmt.Errorf("%w: %v", ErrLoadFromDB, err)
+	}
+
+	var models publicholidaymodel.PublicHolidays
+	for _, v := range *s {
+		models = append(models, StoreToModel(v))
+	}
+
+	return models, nil
+}

@@ -8,6 +8,7 @@ import (
 	"github.com/gorilla/mux"
 	"github.com/jmoiron/sqlx"
 	"github.com/rebel-l/smis"
+	"github.com/rebel-l/ttrack_api/publicholiday/publicholidaymapper"
 	"github.com/rebel-l/ttrack_api/report/reportmodel"
 	"github.com/sirupsen/logrus"
 )
@@ -46,7 +47,7 @@ func (r *reports) reports(writer http.ResponseWriter, request *http.Request) {
 	if !ok { //nolint: wsl
 		response.WriteJSONError(writer, smis.Error{
 			StatusCode: http.StatusBadRequest,
-			Code:       "",
+			Code:       "RPT-NOPARAM",
 			External:   "no year defined",
 			Internal:   "no year defined",
 			Details:    nil,
@@ -59,7 +60,7 @@ func (r *reports) reports(writer http.ResponseWriter, request *http.Request) {
 	if err != nil {
 		response.WriteJSONError(writer, smis.Error{
 			StatusCode: http.StatusBadRequest,
-			Code:       "",
+			Code:       "RPT-WRONGPARAM",
 			External:   "cannot parse year",
 			Internal:   "cannot parse year",
 			Details:    err,
@@ -68,8 +69,20 @@ func (r *reports) reports(writer http.ResponseWriter, request *http.Request) {
 		return
 	}
 
+	mapper := publicholidaymapper.New(r.db)
+	publicHolidays, err := mapper.LoadByYear(request.Context(), yearNum)
+	if err != nil {
+		response.WriteJSONError(writer, smis.Error{
+			StatusCode: http.StatusInternalServerError,
+			Code:       "RPT-PHL",
+			External:   "failed to calculate report",
+			Internal:   "failed to load public holidays",
+			Details:    err,
+		})
+	}
+
 	model := reportmodel.NewReport(yearNum)
-	if err := model.Calculate(); err != nil {
+	if err := model.Calculate(publicHolidays); err != nil {
 		response.WriteJSONError(writer, smis.Error{
 			StatusCode: http.StatusInternalServerError,
 			Code:       "",

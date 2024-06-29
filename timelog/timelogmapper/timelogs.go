@@ -24,3 +24,20 @@ func (m *Mapper) LoadByDateRange(ctx context.Context, start, stop string) (timel
 
 	return tls, nil
 }
+
+func (m *Mapper) LoadByYear(ctx context.Context, year int) (timelogmodel.Timelogs, error) {
+	s := &timelogstore.Timelogs{}
+
+	w := "strftime('%Y', start) = ?"
+
+	if err := s.Load(ctx, m.db, w, fmt.Sprintf("%d", year)); err != nil {
+		return nil, fmt.Errorf("%w: %v", ErrLoadFromDB, err)
+	}
+
+	tls := timelogmodel.Timelogs{}
+	for _, v := range *s {
+		tls = append(tls, StoreToModel(v))
+	}
+
+	return tls, nil
+}

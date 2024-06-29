@@ -5,8 +5,8 @@ import (
 	"time"
 
 	"github.com/rebel-l/ttrack_api/publicholiday/publicholidaymodel"
-
 	"github.com/rebel-l/ttrack_api/report/reportmodel"
+	"github.com/rebel-l/ttrack_api/timelog/timelogmodel"
 )
 
 func TestNewReport(t *testing.T) {
@@ -35,6 +35,7 @@ func TestReport_Calculate(t *testing.T) {
 	testCases := []struct {
 		name           string
 		publicHolidays publicholidaymodel.PublicHolidays
+		timelogs       timelogmodel.Timelogs
 		expected       struct {
 			PublicHolidays           int
 			PublicHolidaysOnWorkdays int
@@ -61,6 +62,7 @@ func TestReport_Calculate(t *testing.T) {
 				Workdays                 int
 			}{PublicHolidays: 2, PublicHolidaysOnWorkdays: 1, Workdays: 261},
 		},
+		// TODO: add test cases with timelogs
 	}
 
 	for _, testCase := range testCases {
@@ -68,7 +70,7 @@ func TestReport_Calculate(t *testing.T) {
 			t.Parallel()
 
 			report := reportmodel.NewReport(2024)
-			if err := report.Calculate(testCase.publicHolidays); err != nil {
+			if err := report.Calculate(testCase.publicHolidays, testCase.timelogs); err != nil {
 				t.Fatalf("Calculate error: %s", err)
 			}
 

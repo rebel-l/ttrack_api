@@ -11,6 +11,7 @@ require (
 	github.com/rebel-l/schema v1.2.1
 	github.com/rebel-l/smis v0.4.0-alpha.5
 	github.com/sirupsen/logrus v1.9.3
+	golang.org/x/exp v0.0.0-20240613232115-7f521ea00fb8
 )
 
 require (

@@ -10,6 +10,7 @@ import (
 	"github.com/rebel-l/smis"
 	"github.com/rebel-l/ttrack_api/publicholiday/publicholidaymapper"
 	"github.com/rebel-l/ttrack_api/report/reportmodel"
+	"github.com/rebel-l/ttrack_api/timelog/timelogmapper"
 	"github.com/sirupsen/logrus"
 )
 
@@ -69,8 +70,8 @@ func (r *reports) reports(writer http.ResponseWriter, request *http.Request) {
 		return
 	}
 
-	mapper := publicholidaymapper.New(r.db)
-	publicHolidays, err := mapper.LoadByYear(request.Context(), yearNum)
+	publicHolidaysMapper := publicholidaymapper.New(r.db)
+	publicHolidays, err := publicHolidaysMapper.LoadByYear(request.Context(), yearNum)
 	if err != nil {
 		response.WriteJSONError(writer, smis.Error{
 			StatusCode: http.StatusInternalServerError,
@@ -81,8 +82,20 @@ func (r *reports) reports(writer http.ResponseWriter, request *http.Request) {
 		})
 	}
 
+	timelogsMapper := timelogmapper.New(r.db)
+	timelogs, err := timelogsMapper.LoadByYear(request.Context(), yearNum)
+	if err != nil {
+		response.WriteJSONError(writer, smis.Error{
+			StatusCode: http.StatusInternalServerError,
+			Code:       "RPT-TL",
+			External:   "failed to calculate report",
+			Internal:   "failed to load timelogs",
+			Details:    err,
+		})
+	}
+
 	model := reportmodel.NewReport(yearNum)
-	if err := model.Calculate(publicHolidays); err != nil {
+	if err := model.Calculate(publicHolidays, timelogs); err != nil {
 		response.WriteJSONError(writer, smis.Error{
 			StatusCode: http.StatusInternalServerError,
 			Code:       "",

@@ -23,7 +23,7 @@ type Report struct {
 	FirstDay                 time.Time           `json:"FirstDay"`
 	LastDay                  time.Time           `json:"LastDay"`
 	WorkDaysPerReason        map[string]uint32   `json:"WorkDaysPerReason"`
-	WorksDaysPerLocation     map[string]uint32   `json:"WorksDaysPerLocation"`
+	WorkDaysPerLocation      map[string]uint32   `json:"WorkDaysPerLocation"`
 	Warnings                 map[string][]string `json:"Warnings"`
 }
 
@@ -46,14 +46,14 @@ func NewReport(year int) *Report {
 	lastDayOfYear := time.Date(year+1, 1, 1, 0, 0, 0, 0, time.UTC).Add(-time.Second)
 
 	return &Report{
-		Year:                 year,
-		FirstDay:             firstDayOfYear,
-		LastDay:              lastDayOfYear,
-		Days:                 0,
-		WorkDays:             0,
-		WorkDaysPerReason:    make(map[string]uint32),
-		WorksDaysPerLocation: make(map[string]uint32),
-		Warnings:             make(map[string][]string),
+		Year:                year,
+		FirstDay:            firstDayOfYear,
+		LastDay:             lastDayOfYear,
+		Days:                0,
+		WorkDays:            0,
+		WorkDaysPerReason:   make(map[string]uint32),
+		WorkDaysPerLocation: make(map[string]uint32),
+		Warnings:            make(map[string][]string),
 	}
 }
 
@@ -128,7 +128,7 @@ func (r *Report) Calculate(publicHolidays publicholidaymodel.PublicHolidays, tim
 
 	for _, locations := range workdayLocation {
 		for location, _ := range locations {
-			r.WorksDaysPerLocation[location]++
+			r.WorkDaysPerLocation[location]++
 		}
 	}
 

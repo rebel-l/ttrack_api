@@ -4,6 +4,8 @@ import (
 	"io"
 	"net/http"
 
+	"github.com/google/uuid"
+	"github.com/gorilla/mux"
 	"github.com/jmoiron/sqlx"
 	"github.com/rebel-l/smis"
 	"github.com/rebel-l/ttrack_api/timelog/timelogmapper"
@@ -72,4 +74,51 @@ func (t *timelog) upsert(writer http.ResponseWriter, request *http.Request) {
 	}
 
 	response.WriteJSON(writer, http.StatusOK, model)
+}
+
+func (t *timelog) delete(writer http.ResponseWriter, request *http.Request) {
+	log := t.svc.NewLogForRequestID(request.Context())
+	response := smis.Response{Log: log}
+
+	vars := mux.Vars(request)
+	id, ok := vars["id"]
+	if !ok {
+		response.WriteJSONError(writer, smis.Error{
+			StatusCode: http.StatusBadRequest,
+			Code:       "",
+			External:   "no id defined",
+			Internal:   "no id defined",
+			Details:    nil,
+		})
+
+		return
+	}
+
+	idParsed, err := uuid.Parse(id)
+	if err != nil {
+		response.WriteJSONError(writer, smis.Error{
+			StatusCode: http.StatusBadRequest,
+			Code:       "",
+			External:   "no id defined",
+			Internal:   "id not a uuid",
+			Details:    nil,
+		})
+
+		return
+	}
+
+	mapper := timelogmapper.New(t.db)
+	if err := mapper.Delete(request.Context(), idParsed); err != nil {
+		response.WriteJSONError(writer, smis.Error{
+			StatusCode: http.StatusInternalServerError,
+			Code:       "",
+			External:   "failed to delete timelog",
+			Internal:   err.Error(),
+			Details:    nil,
+		})
+
+		return
+	}
+
+	writer.WriteHeader(http.StatusNoContent)
 }

@@ -15,6 +15,10 @@ func Init(svc *smis.Service, db *sqlx.DB) error {
 		return err
 	}
 
+	if _, err := svc.RegisterEndpoint("/timgelogs/{id}", http.MethodDelete, endpoint.delete); err != nil {
+		return err
+	}
+
 	_, err := svc.RegisterEndpoint("/timelogs/{start}/{stop}", http.MethodGet, endpoint.loadByRange)
 
 	return err // nolint: wrapcheck
